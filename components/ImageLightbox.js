@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { X } from "lucide-react";
 
 export default function ImageLightbox({ src, alt, onClose }) {
   useEffect(() => {
@@ -23,10 +24,10 @@ export default function ImageLightbox({ src, alt, onClose }) {
       <button
         type="button"
         onClick={onClose}
-        className="card-frame-sm absolute right-4 top-4 flex h-10 w-10 items-center justify-center bg-white text-[var(--ink)]"
+        className="card-frame-sm absolute right-4 top-4 flex h-10 w-10 items-center justify-center bg-white text-[var(--ink-on-light)]"
         aria-label="Kapat"
       >
-        ✕
+        <X className="h-5 w-5" strokeWidth={2} />
       </button>
     </div>
   );

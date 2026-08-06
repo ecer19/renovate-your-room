@@ -3,7 +3,10 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
-export default function TiltCard({ children, className = "", baseRotate = 0, style, ...props }) {
+const TAGS = { div: motion.div, button: motion.button };
+
+export default function TiltCard({ children, className = "", baseRotate = 0, style, as = "div", ...props }) {
+  const Tag = TAGS[as] || motion.div;
   const ref = useRef(null);
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
@@ -24,8 +27,9 @@ export default function TiltCard({ children, className = "", baseRotate = 0, sty
   }
 
   return (
-    <motion.div
+    <Tag
       ref={ref}
+      type={as === "button" ? "button" : undefined}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       whileHover={{ scale: 1.08 }}
@@ -35,6 +39,6 @@ export default function TiltCard({ children, className = "", baseRotate = 0, sty
       {...props}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 }

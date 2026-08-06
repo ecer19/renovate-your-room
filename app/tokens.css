@@ -1,0 +1,49 @@
+/*
+  Design tokens — "Numune" direction, dark theme.
+  Every component reads color/type/radius/shadow/motion values from here.
+  Variable NAMES stay stable on purpose (--accent, --teal, etc. are used
+  throughout the component tree); only their VALUES change when the
+  direction/theme changes, so a re-theme never touches component files.
+*/
+
+:root {
+  /* Color — dark, cinematic interior-design palette */
+  --paper: #17130f; /* page ground */
+  --paper-deep: #0f0c09; /* recessed / secondary surface */
+  --card: #241d16; /* card surface */
+  --ink: #f5ecdb; /* primary text, borders — light on dark */
+  --ink-soft: #b7a991; /* secondary text */
+  --line: #f5ecdb; /* border color, same as ink on purpose — reads as an etched light edge on dark cards */
+  --void: #130d08; /* near-black, cinematic hero background */
+  --scrim: rgba(10, 7, 4, 0.75); /* fixed dark overlay for photo captions — never flips with theme */
+  --ink-on-light: #241c14; /* fixed dark text for the few fixed-white surfaces (tags, handles) */
+
+  --accent: #c1531b; /* clay — primary accent (CTA, primary selections) */
+  --accent-deep: #de6b2e; /* brighter on hover — darkening further would sink into the dark ground */
+  --teal: #2f7a63; /* pine, brightened for visibility on dark. Name kept for continuity
+                        with existing component references. */
+  --teal-deep: #3f9179;
+
+  /* Type scale */
+  --text-display-xl: clamp(2.75rem, 6vw, 4.75rem);
+  --text-display-lg: clamp(1.75rem, 3.5vw, 2.5rem);
+  --text-display-md: 1.25rem;
+  --text-micro: 0.6875rem;
+
+  /* Radius scale — deliberately varied, not one value everywhere */
+  --radius-sm: 10px; /* chips, small controls */
+  --radius-md: 18px; /* standard cards */
+  --radius-lg: 32px; /* hero surfaces: header, welcome cards, result reveal */
+
+  /* Shadow scale — hard graphic shadow for small/flat elements,
+     soft photographic shadow for large elevated surfaces */
+  --shadow-flat: 2px 2px 0 var(--line);
+  --shadow-card: 5px 5px 0 var(--line);
+  --shadow-lift: 0 24px 48px -16px rgba(0, 0, 0, 0.6);
+
+  /* Motion */
+  --motion-fast: 150ms;
+  --motion-base: 320ms;
+  --motion-slow: 650ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

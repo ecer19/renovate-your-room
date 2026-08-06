@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Camera, X } from "lucide-react";
 
 export default function ImageUploader({ previewUrl, onSelect, onClear }) {
   const inputRef = useRef(null);
@@ -38,13 +39,11 @@ export default function ImageUploader({ previewUrl, onSelect, onClear }) {
             handleFiles(e.dataTransfer.files);
           }}
           className={`card-frame-sm flex w-full flex-col items-center justify-center gap-2 border-dashed p-8 text-center transition ${
-            isDragging ? "border-[var(--accent)] bg-[var(--accent)]/10" : "bg-[var(--paper)]"
+            isDragging ? "border-[var(--accent)] bg-[var(--accent)]/10" : "bg-[var(--card)]"
           }`}
         >
-          <span className="text-2xl">📷</span>
-          <span className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">
-            Fotoğraf Yükle
-          </span>
+          <Camera className="h-6 w-6 text-[var(--ink-soft)]" strokeWidth={1.5} />
+          <span className="font-display text-base text-[var(--ink)]">Fotoğraf Yükle</span>
           <span className="text-xs text-[var(--ink-soft)]">Sürükle bırak ya da tıkla</span>
         </button>
       ) : (
@@ -57,7 +56,7 @@ export default function ImageUploader({ previewUrl, onSelect, onClear }) {
             className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full border-[1.5px] border-[var(--line)] bg-[var(--card)] text-[var(--ink)] shadow-[2px_2px_0_var(--line)]"
             aria-label="Fotoğrafı kaldır"
           >
-            ✕
+            <X className="h-4 w-4" strokeWidth={2} />
           </button>
         </div>
       )}

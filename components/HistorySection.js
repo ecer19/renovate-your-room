@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { ROOM_TYPES } from "@/lib/constants";
 import ImageLightbox from "@/components/ImageLightbox";
+import TiltCard from "@/components/TiltCard";
 
 const dateFormatter = new Intl.DateTimeFormat("tr-TR", { dateStyle: "medium", timeStyle: "short" });
 
@@ -52,35 +53,36 @@ export default function HistorySection({ refreshKey }) {
     };
   }, [refreshKey]);
 
-  return (
-    <section className="card-frame mt-8 flex flex-col gap-4 bg-[var(--card)] p-5 sm:p-7">
-      <h2 className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">Geçmiş Tasarımlar</h2>
+  if (status === "loaded" && items.length === 0) return null;
 
-      {status === "loading" && <p className="text-sm text-[var(--ink-soft)]">Yükleniyor...</p>}
+  return (
+    <section className="flex flex-col gap-6">
+      <h2 className="font-display text-center text-xl text-[var(--ink)]">Geçmiş Tasarımlar</h2>
+
+      {status === "loading" && <p className="text-center text-sm text-[var(--ink-soft)]">Yükleniyor...</p>}
 
       {status === "unconfigured" && (
-        <p className="text-sm text-[var(--ink-soft)]">
+        <p className="text-center text-sm text-[var(--ink-soft)]">
           Supabase henüz yapılandırılmamış. <code>.env.local</code> dosyasına{" "}
           <code>NEXT_PUBLIC_SUPABASE_URL</code> ve <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>{" "}
           eklendiğinde geçmiş tasarımların burada görünecek.
         </p>
       )}
 
-      {status === "error" && <p className="text-sm text-red-700">Geçmiş tasarımlar yüklenemedi.</p>}
-
-      {status === "loaded" && items.length === 0 && (
-        <p className="text-sm text-[var(--ink-soft)]">Henüz bir tasarım oluşturmadın.</p>
-      )}
+      {status === "error" && <p className="text-center text-sm text-red-700">Geçmiş tasarımlar yüklenemedi.</p>}
 
       {status === "loaded" && items.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((item, index) => (
-            <button
+            <TiltCard
               key={item.id}
-              type="button"
+              as="button"
               onClick={() => setZoomed(item)}
-              className="card-frame-sm animate-fade-up flex flex-col gap-2 bg-[var(--card)] p-2 text-left transition hover:-translate-y-0.5"
-              style={{ animationDelay: `${Math.min(index, 7) * 0.06}s` }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: Math.min(index, 7) * 0.06, type: "spring", stiffness: 260, damping: 22 }}
+              className="card-frame-sm flex flex-col gap-2 bg-[var(--card)] p-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2"
             >
               <div className="aspect-square w-full overflow-hidden rounded-md border border-[var(--line)]/40">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -90,12 +92,12 @@ export default function HistorySection({ refreshKey }) {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <p className="font-display truncate text-[10px] uppercase tracking-wide text-[var(--ink)]">
+              <p className="truncate text-[10px] font-bold uppercase tracking-wide text-[var(--ink)]">
                 {roomLabel(item.room_type)}
               </p>
               <p className="truncate text-xs text-[var(--ink-soft)]">{item.style}</p>
               <p className="text-[10px] text-[var(--ink-soft)]/70">{dateFormatter.format(new Date(item.created_at))}</p>
-            </button>
+            </TiltCard>
           ))}
         </div>
       )}

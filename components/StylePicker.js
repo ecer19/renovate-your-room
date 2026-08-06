@@ -1,17 +1,21 @@
 import PickerCard from "@/components/PickerCard";
 
+const WIDTHS = ["w-20", "w-28", "w-24", "w-20", "w-28", "w-24", "w-20", "w-24"];
+
 export default function StylePicker({ options, value, onSelect }) {
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div className="flex flex-wrap gap-3">
       {options.map((option, index) => (
-        <PickerCard
-          key={option.key}
-          icon={option.key}
-          label={option.label}
-          isActive={value === option.key}
-          tone={index % 2 === 0 ? "teal" : "accent"}
-          onClick={() => onSelect(option.key)}
-        />
+        <div key={option.key} className={WIDTHS[index % WIDTHS.length]}>
+          <PickerCard
+            icon={option.key}
+            label={option.label}
+            image={option.image}
+            isActive={value === option.key}
+            tone={index % 2 === 0 ? "teal" : "accent"}
+            onClick={() => onSelect(option.key)}
+          />
+        </div>
       ))}
     </div>
   );

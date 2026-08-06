@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { MoveHorizontal } from "lucide-react";
 
 export default function CompareSlider({ beforeSrc, afterSrc, beforeAlt, afterAlt }) {
   const [position, setPosition] = useState(0);
@@ -42,7 +43,7 @@ export default function CompareSlider({ beforeSrc, afterSrc, beforeAlt, afterAlt
     <div
       ref={containerRef}
       onPointerDown={handlePointerDown}
-      className="card-frame relative aspect-[4/3] w-full cursor-ew-resize select-none overflow-hidden bg-[var(--card)]"
+      className="card-frame-lg relative aspect-[4/3] w-full cursor-ew-resize select-none overflow-hidden bg-[var(--card)]"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={afterSrc} alt={afterAlt} draggable={false} className="absolute inset-0 h-full w-full object-cover" />
@@ -56,15 +57,15 @@ export default function CompareSlider({ beforeSrc, afterSrc, beforeAlt, afterAlt
       </div>
 
       <div className={`absolute bottom-0 top-0 w-0.5 bg-white ${smooth}`} style={{ left: `${position}%` }}>
-        <div className="absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--line)] bg-white text-xs text-[var(--ink)] shadow-[2px_2px_0_var(--line)]">
-          ⟷
+        <div className="absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--line)] bg-white text-[var(--ink-on-light)] shadow-[2px_2px_0_var(--line)]">
+          <MoveHorizontal className="h-4 w-4" strokeWidth={2} />
         </div>
       </div>
 
-      <span className="font-display absolute left-3 top-3 rounded-full border-[1.5px] border-[var(--line)] bg-white/90 px-2.5 py-1 text-[10px] uppercase tracking-wide text-[var(--ink)]">
+      <span className="absolute left-3 top-3 rounded-full border-[1.5px] border-[var(--line)] bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[var(--ink-on-light)]">
         Önce
       </span>
-      <span className="font-display absolute right-3 top-3 rounded-full border-[1.5px] border-[var(--line)] bg-[var(--teal)] px-2.5 py-1 text-[10px] uppercase tracking-wide text-white">
+      <span className="absolute right-3 top-3 rounded-full border-[1.5px] border-[var(--line)] bg-[var(--teal)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
         Sonra
       </span>
     </div>

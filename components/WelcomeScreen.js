@@ -2,21 +2,16 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import Icon from "@/components/Icon";
-import TiltCard from "@/components/TiltCard";
 import MagneticButton from "@/components/MagneticButton";
 
-const WALL_ITEMS = [
-  { icon: "living", label: "Salon", tone: "accent", rotate: -6, y: 0 },
-  { icon: "minimal", label: "Minimal", tone: "teal", rotate: 4, y: 18 },
-  { icon: "bedroom", label: "Yatak Odası", tone: "teal", rotate: -3, y: -8 },
-  { icon: "scandinavian", label: "Scandinavian", tone: "accent", rotate: 7, y: 10 },
-  { icon: "kitchen", label: "Mutfak", tone: "accent", rotate: -8, y: -14 },
-  { icon: "industrial", label: "Industrial", tone: "teal", rotate: 3, y: 6 },
-  { icon: "luxury", label: "Luxury", tone: "teal", rotate: -4, y: 16 },
-  { icon: "study", label: "Çalışma Odası", tone: "accent", rotate: 6, y: -10 },
-  { icon: "cozy", label: "Cozy", tone: "accent", rotate: -2, y: 2 },
-  { icon: "vintage", label: "Vintage", tone: "teal", rotate: 5, y: -12 },
+// Depth-ordered photo layers for the parallax "diorama" — far (small, blurred,
+// barely moves) to near (large, sharp, moves most, has its own autonomous
+// 3D drift). Position is % of the stage, deliberately scattered, not a grid.
+const LAYERS = [
+  { image: "/thumbs/rooms/kitchen.jpg", depth: 6, left: "10%", top: "12%", size: "w-16 sm:w-20", blur: "blur-[3px]", opacity: "opacity-40" },
+  { image: "/thumbs/styles/luxury.jpg", depth: 7, left: "82%", top: "70%", size: "w-16 sm:w-20", blur: "blur-[3px]", opacity: "opacity-40" },
+  { image: "/thumbs/rooms/bedroom.jpg", depth: 15, left: "80%", top: "14%", size: "w-24 sm:w-32", blur: "blur-[1px]", opacity: "opacity-70" },
+  { image: "/thumbs/styles/scandinavian.jpg", depth: 16, left: "8%", top: "66%", size: "w-24 sm:w-32", blur: "blur-[1px]", opacity: "opacity-70" },
 ];
 
 const TITLE_LETTERS = "Renovate".split("");
@@ -27,61 +22,104 @@ const letterVariants = {
     opacity: 1,
     y: 0,
     rotate: 0,
-    transition: { delay: 0.25 + i * 0.035, type: "spring", stiffness: 260, damping: 18 },
+    transition: { delay: 0.35 + i * 0.035, type: "spring", stiffness: 260, damping: 18 },
   }),
 };
 
 export default function WelcomeScreen({ onStart }) {
-  const wallRef = useRef(null);
+  const stageRef = useRef(null);
 
   function handlePointerMove(e) {
-    const rect = wallRef.current.getBoundingClientRect();
-    wallRef.current.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-    wallRef.current.style.setProperty("--my", `${e.clientY - rect.top}px`);
+    const rect = stageRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    stageRef.current.style.setProperty("--px", px.toFixed(3));
+    stageRef.current.style.setProperty("--py", py.toFixed(3));
+  }
+
+  function handlePointerLeave() {
+    stageRef.current.style.setProperty("--px", 0);
+    stageRef.current.style.setProperty("--py", 0);
   }
 
   return (
-    <main className="hero-vignette relative flex min-h-screen flex-col items-center justify-center gap-12 overflow-hidden px-4 py-16 text-center">
+    <main className="hero-void relative flex min-h-screen flex-col items-center justify-center gap-10 overflow-hidden px-4 py-16 text-center">
+      <div className="blob blob-a -left-24 -top-24 h-[26rem] w-[26rem] bg-[var(--accent)]/35" />
+      <div className="blob blob-c -bottom-32 right-0 h-[26rem] w-[26rem] bg-[var(--teal)]/45" />
+
       <div
-        ref={wallRef}
+        ref={stageRef}
         onPointerMove={handlePointerMove}
-        className="relative mx-auto flex max-w-xl flex-wrap items-center justify-center gap-3 sm:gap-4"
+        onPointerLeave={handlePointerLeave}
+        style={{ perspective: 1600 }}
+        className="relative h-[22rem] w-full max-w-2xl sm:h-[28rem]"
       >
-        <div
-          className="pointer-events-none absolute -inset-8 opacity-70 transition-opacity"
-          style={{
-            background:
-              "radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.22), transparent 70%)",
-          }}
-        />
-        {WALL_ITEMS.map((item, index) => (
-          <TiltCard
-            key={item.icon}
-            baseRotate={item.rotate}
-            initial={{ opacity: 0, scale: 0.6, y: item.y + 30 }}
-            animate={{ opacity: 1, scale: 1, y: item.y }}
-            transition={{ delay: index * 0.05, type: "spring", stiffness: 260, damping: 20 }}
-            className="card-frame-sm relative flex h-16 w-14 flex-shrink-0 flex-col items-center justify-center gap-1.5 bg-[var(--card)] sm:h-20 sm:w-[4.5rem]"
+        {LAYERS.map((layer, i) => (
+          <div
+            key={layer.image}
+            className={`card-frame-sm absolute overflow-hidden ${layer.size} ${layer.blur} ${layer.opacity} aspect-square`}
+            style={{
+              left: layer.left,
+              top: layer.top,
+              transform: `translate3d(calc(-50% + var(--px, 0) * ${layer.depth}px), calc(-50% + var(--py, 0) * ${layer.depth}px), 0)`,
+              transition: "transform 0.3s ease-out",
+            }}
           >
-            <span
-              className={`absolute left-1.5 top-1.5 h-1.5 w-1.5 rounded-full ${
-                item.tone === "accent" ? "bg-[var(--accent)]" : "bg-[var(--teal)]"
-              }`}
-            />
-            <span
-              className={`flex h-7 w-7 items-center justify-center rounded-full sm:h-8 sm:w-8 ${
-                item.tone === "accent"
-                  ? "bg-[var(--accent)]/15 text-[var(--accent-deep)]"
-                  : "bg-[var(--teal)]/15 text-[var(--teal-deep)]"
-              }`}
-            >
-              <Icon name={item.icon} className="h-4 w-4 sm:h-5 sm:w-5" />
-            </span>
-          </TiltCard>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={layer.image} alt="" draggable={false} className="h-full w-full object-cover" />
+          </div>
         ))}
+
+        {/* Hero object — the featured photo, floating and slowly turning in space */}
+        <div
+          className="absolute left-1/2 top-1/2"
+          style={{
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <div
+            style={{
+              transform: `translate3d(calc(var(--px, 0) * 30px), calc(var(--py, 0) * 30px), 0)`,
+              transition: "transform 0.25s ease-out",
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, rotateY: -20 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                rotateY: [-10, 10, -10],
+                rotateX: [4, -4, 4],
+              }}
+              transition={{
+                opacity: { duration: 0.7 },
+                scale: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                rotateY: { duration: 9, repeat: Infinity, ease: "easeInOut" },
+                rotateX: { duration: 11, repeat: Infinity, ease: "easeInOut" },
+              }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="relative"
+            >
+              <div className="absolute -inset-6 rounded-full bg-[var(--accent)]/40 blur-3xl" />
+              <div className="card-frame-lg relative h-56 w-56 overflow-hidden sm:h-72 sm:w-72">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/thumbs/rooms/living.jpg"
+                  alt="Yenilenmiş oda örneği"
+                  draggable={false}
+                  className="h-full w-full object-cover"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{ background: "linear-gradient(to top, var(--scrim), transparent 60%)" }}
+                />
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col items-center gap-3">
+      <div className="relative z-20 -mt-8 flex flex-col items-center gap-3">
         <h1 className="font-display flex flex-wrap items-baseline justify-center gap-x-4 text-4xl uppercase leading-tight tracking-tight sm:text-6xl">
           <span className="flex" style={{ color: "var(--accent)" }}>
             {TITLE_LETTERS.map((letter, i) => (
@@ -93,8 +131,8 @@ export default function WelcomeScreen({ onStart }) {
           <motion.span
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.65, duration: 0.5 }}
-            className="text-[var(--card)]"
+            transition={{ delay: 0.75, duration: 0.5 }}
+            className="text-white"
           >
             Your Room
           </motion.span>
@@ -102,8 +140,8 @@ export default function WelcomeScreen({ onStart }) {
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85, duration: 0.5 }}
-          className="max-w-sm text-sm text-[var(--card)]/85 sm:text-base"
+          transition={{ delay: 0.95, duration: 0.5 }}
+          className="max-w-sm text-sm text-white/70 sm:text-base"
         >
           Odanın fotoğrafını yükle, stilini seç, yapay zekâ ile yeniden tasarla.
         </motion.p>
@@ -112,11 +150,12 @@ export default function WelcomeScreen({ onStart }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1, type: "spring", stiffness: 260, damping: 18 }}
+        transition={{ delay: 1.1, type: "spring", stiffness: 260, damping: 18 }}
+        className="relative z-20"
       >
         <MagneticButton
           onClick={onStart}
-          className="card-frame bg-[var(--accent)] px-10 py-4 font-display text-base text-white transition-colors hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--teal)]"
+          className="card-frame bg-[var(--accent)] px-10 py-4 font-display text-base text-white transition-colors hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
         >
           Başla
         </MagneticButton>
