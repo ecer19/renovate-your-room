@@ -16,31 +16,34 @@ export default function RenovateForm({
   const isLoading = status === "loading";
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
-    >
+    <form onSubmit={onSubmit} className="card-frame flex flex-col gap-6 bg-[var(--card)] p-5 sm:p-7">
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-slate-700">1. Oda Fotoğrafı</label>
+        <label className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">
+          1 · Oda Fotoğrafı
+        </label>
         <ImageUploader previewUrl={form.imagePreviewUrl} onSelect={onSelectImage} onClear={onClearImage} />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-slate-700">2. Oda Türü</label>
+        <label className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">
+          2 · Oda Türü
+        </label>
         <RoomTypePicker options={ROOM_TYPES} value={form.roomType} onSelect={onSelectRoomType} />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-slate-700">3. Dekorasyon Stili</label>
+        <label className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">
+          3 · Dekorasyon Stili
+        </label>
         <StylePicker options={STYLES} value={form.style} onSelect={onSelectStyle} />
       </div>
 
       <button
         type="submit"
         disabled={!isValid || isLoading}
-        className="mt-2 w-full rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+        className="card-frame-sm mt-1 w-full bg-[var(--accent)] px-6 py-3 font-display text-sm uppercase tracking-wide text-white transition enabled:hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-deep)] focus-visible:ring-offset-2"
       >
-        {isLoading ? "Odan yeniden tasarlanıyor..." : "Renovate"}
+        {isLoading ? "Oluşturuluyor..." : "Renovate"}
       </button>
     </form>
   );

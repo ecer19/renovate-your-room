@@ -1,19 +1,17 @@
+import PickerCard from "@/components/PickerCard";
+
 export default function RoomTypePicker({ options, value, onSelect }) {
   return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((option) => (
-        <button
+    <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
+      {options.map((option, index) => (
+        <PickerCard
           key={option.key}
-          type="button"
+          icon={option.key}
+          label={option.label}
+          isActive={value === option.key}
+          tone={index % 2 === 0 ? "accent" : "teal"}
           onClick={() => onSelect(option.key)}
-          className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
-            value === option.key
-              ? "border-slate-900 bg-slate-900 text-white"
-              : "border-slate-300 text-slate-600 hover:border-slate-400"
-          }`}
-        >
-          {option.label}
-        </button>
+        />
       ))}
     </div>
   );

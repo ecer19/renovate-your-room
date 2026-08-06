@@ -1,5 +1,82 @@
 @import "tailwindcss";
 
+:root {
+  --accent: #c26a2e;
+  --accent-deep: #a5551f;
+  --teal: #2f6f62;
+  --teal-deep: #23554a;
+  --ink: #221b12;
+  --ink-soft: #6b5d47;
+  --paper: #f3ede0;
+  --card: #fffdf8;
+  --line: #221b12;
+}
+
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.font-display {
+  font-family: var(--font-display), "Arial Black", sans-serif;
+}
+
+/* Warm card: soft border + hard offset shadow, like a printed sample chip.
+   No background here on purpose — each usage sets its own bg-* utility,
+   otherwise this rule's source order beats any Tailwind bg-* class applied
+   alongside it and silently forces every card back to white. */
+.card-frame {
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 4px 4px 0 var(--line);
+}
+
+.card-frame-sm {
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 var(--line);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 3.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-fade-up {
+    animation: none;
+  }
+}
+
+.hero-vignette {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.15), transparent 65%),
+    var(--teal);
 }

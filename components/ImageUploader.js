@@ -37,24 +37,24 @@ export default function ImageUploader({ previewUrl, onSelect, onClear }) {
             setIsDragging(false);
             handleFiles(e.dataTransfer.files);
           }}
-          className={`flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-8 text-center transition ${
-            isDragging ? "border-slate-500 bg-slate-50" : "border-slate-300 hover:border-slate-400"
+          className={`card-frame-sm flex w-full flex-col items-center justify-center gap-2 border-dashed p-8 text-center transition ${
+            isDragging ? "border-[var(--accent)] bg-[var(--accent)]/10" : "bg-[var(--paper)]"
           }`}
         >
           <span className="text-2xl">📷</span>
-          <span className="text-sm font-medium text-slate-600">
-            Oda fotoğrafını sürükle bırak ya da tıkla
+          <span className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">
+            Fotoğraf Yükle
           </span>
-          <span className="text-xs text-slate-400">PNG, JPG</span>
+          <span className="text-xs text-[var(--ink-soft)]">Sürükle bırak ya da tıkla</span>
         </button>
       ) : (
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200">
+        <div className="card-frame-sm relative overflow-hidden bg-[var(--card)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={previewUrl} alt="Yüklenen oda fotoğrafı" className="h-56 w-full object-cover" />
           <button
             type="button"
             onClick={onClear}
-            className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full border-[1.5px] border-[var(--line)] bg-[var(--card)] text-[var(--ink)] shadow-[2px_2px_0_var(--line)]"
             aria-label="Fotoğrafı kaldır"
           >
             ✕

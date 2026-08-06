@@ -53,35 +53,36 @@ export default function HistorySection({ refreshKey }) {
   }, [refreshKey]);
 
   return (
-    <section className="mt-10 flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-sm font-semibold text-slate-700">Geçmiş Tasarımlar</h2>
+    <section className="card-frame mt-8 flex flex-col gap-4 bg-[var(--card)] p-5 sm:p-7">
+      <h2 className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">Geçmiş Tasarımlar</h2>
 
-      {status === "loading" && <p className="text-sm text-slate-400">Yükleniyor...</p>}
+      {status === "loading" && <p className="text-sm text-[var(--ink-soft)]">Yükleniyor...</p>}
 
       {status === "unconfigured" && (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-[var(--ink-soft)]">
           Supabase henüz yapılandırılmamış. <code>.env.local</code> dosyasına{" "}
           <code>NEXT_PUBLIC_SUPABASE_URL</code> ve <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>{" "}
           eklendiğinde geçmiş tasarımların burada görünecek.
         </p>
       )}
 
-      {status === "error" && <p className="text-sm text-red-500">Geçmiş tasarımlar yüklenemedi.</p>}
+      {status === "error" && <p className="text-sm text-red-700">Geçmiş tasarımlar yüklenemedi.</p>}
 
       {status === "loaded" && items.length === 0 && (
-        <p className="text-sm text-slate-400">Henüz bir tasarım oluşturmadın.</p>
+        <p className="text-sm text-[var(--ink-soft)]">Henüz bir tasarım oluşturmadın.</p>
       )}
 
       {status === "loaded" && items.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {items.map((item) => (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {items.map((item, index) => (
             <button
               key={item.id}
               type="button"
               onClick={() => setZoomed(item)}
-              className="flex flex-col gap-2 rounded-2xl border border-slate-200 p-3 text-left transition hover:border-slate-300"
+              className="card-frame-sm animate-fade-up flex flex-col gap-2 bg-[var(--card)] p-2 text-left transition hover:-translate-y-0.5"
+              style={{ animationDelay: `${Math.min(index, 7) * 0.06}s` }}
             >
-              <div className="aspect-square w-full overflow-hidden rounded-xl bg-slate-100">
+              <div className="aspect-square w-full overflow-hidden rounded-md border border-[var(--line)]/40">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.generated_image_url}
@@ -89,9 +90,11 @@ export default function HistorySection({ refreshKey }) {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <p className="truncate text-xs font-semibold text-slate-700">{roomLabel(item.room_type)}</p>
-              <p className="truncate text-xs text-slate-500">{item.style}</p>
-              <p className="text-[11px] text-slate-400">{dateFormatter.format(new Date(item.created_at))}</p>
+              <p className="font-display truncate text-[10px] uppercase tracking-wide text-[var(--ink)]">
+                {roomLabel(item.room_type)}
+              </p>
+              <p className="truncate text-xs text-[var(--ink-soft)]">{item.style}</p>
+              <p className="text-[10px] text-[var(--ink-soft)]/70">{dateFormatter.format(new Date(item.created_at))}</p>
             </button>
           ))}
         </div>

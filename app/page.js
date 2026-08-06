@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import WelcomeScreen from "@/components/WelcomeScreen";
 import RenovateForm from "@/components/RenovateForm";
 import ResultPanel from "@/components/ResultPanel";
 import HistorySection from "@/components/HistorySection";
@@ -13,6 +14,7 @@ const initialForm = {
 };
 
 export default function Home() {
+  const [started, setStarted] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState("idle");
   const [result, setResult] = useState(null);
@@ -83,38 +85,46 @@ export default function Home() {
     setErrorMessage("");
   }
 
+  if (!started) {
+    return <WelcomeScreen onStart={() => setStarted(true)} />;
+  }
+
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-10 sm:px-6 lg:px-8">
-      <header className="mb-10 flex flex-col items-center gap-3 text-center">
-        <span className="text-3xl">🛋️</span>
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+    <main className="min-h-screen bg-[var(--paper)]">
+      <header className="hero-vignette animate-fade-up rounded-b-[2rem] px-4 py-10 text-center shadow-[0_8px_0_rgba(0,0,0,0.06)] sm:px-6 lg:px-8">
+        <h1 className="font-display text-2xl uppercase tracking-tight text-[var(--card)] sm:text-3xl">
           Renovate Your Room
         </h1>
-        <p className="max-w-md text-sm text-slate-500 sm:text-base">
-          Odanın fotoğrafını yükle, stilini seç, yapay zekâ ile yeniden tasarla.
+        <p className="mx-auto mt-2 max-w-md text-sm text-[var(--card)]/85">
+          Fotoğrafını yükle, oda türünü ve stilini seç, yeniden tasarla.
         </p>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-        <RenovateForm
-          form={form}
-          onSelectImage={handleSelectImage}
-          onClearImage={handleClearImage}
-          onSelectRoomType={handleSelectRoomType}
-          onSelectStyle={handleSelectStyle}
-          onSubmit={handleSubmit}
-          isValid={isValid}
-          status={status}
-        />
-        <ResultPanel
-          status={status}
-          result={result}
-          errorMessage={errorMessage}
-          onRegenerate={handleRegenerate}
-        />
-      </div>
+      <div className="mx-auto flex w-full max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+        <div
+          className="animate-fade-up grid gap-6 lg:grid-cols-2 lg:items-start"
+          style={{ animationDelay: "0.1s" }}
+        >
+          <RenovateForm
+            form={form}
+            onSelectImage={handleSelectImage}
+            onClearImage={handleClearImage}
+            onSelectRoomType={handleSelectRoomType}
+            onSelectStyle={handleSelectStyle}
+            onSubmit={handleSubmit}
+            isValid={isValid}
+            status={status}
+          />
+          <ResultPanel
+            status={status}
+            result={result}
+            errorMessage={errorMessage}
+            onRegenerate={handleRegenerate}
+          />
+        </div>
 
-      <HistorySection refreshKey={historyVersion} />
+        <HistorySection refreshKey={historyVersion} />
+      </div>
     </main>
   );
 }

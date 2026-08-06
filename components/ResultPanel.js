@@ -17,24 +17,24 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
   }
 
   return (
-    <div className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="text-sm font-semibold text-slate-700">Sonuç</h2>
+    <div className="card-frame flex flex-col gap-4 bg-[var(--card)] p-5 sm:p-7">
+      <h2 className="font-display text-xs uppercase tracking-wide text-[var(--ink)]">Sonuç</h2>
 
       {status === "idle" && (
-        <div className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl border border-dashed border-slate-300 text-center text-sm text-slate-400">
+        <div className="card-frame-sm flex aspect-[4/3] w-full items-center justify-center border-dashed bg-[var(--paper)] text-center text-sm text-[var(--ink-soft)]">
           Fotoğrafını yükle ve Renovate butonuna bas.
         </div>
       )}
 
       {status === "loading" && (
-        <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 text-sm text-slate-500">
-          <span className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
+        <div className="card-frame-sm flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 bg-[var(--teal)]/10 text-sm text-[var(--ink)]">
+          <span className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--teal)]/25 border-t-[var(--teal)]" />
           Odan yeniden tasarlanıyor...
         </div>
       )}
 
       {status === "error" && (
-        <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 p-4 text-center text-sm text-red-600">
+        <div className="card-frame-sm flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 border-red-300 bg-red-50 p-4 text-center text-sm text-red-700">
           {errorMessage || "Bir hata oluştu. Lütfen tekrar dene."}
         </div>
       )}
@@ -51,14 +51,14 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
             <button
               type="button"
               onClick={onRegenerate}
-              className="flex-1 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400"
+              className="card-frame-sm flex-1 bg-[var(--card)] px-4 py-2.5 font-display text-xs uppercase tracking-wide text-[var(--ink)] transition hover:bg-[var(--paper)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2"
             >
               Tekrar Oluştur
             </button>
             <button
               type="button"
               onClick={handleDownload}
-              className="flex-1 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
+              className="card-frame-sm flex-1 bg-[var(--accent)] px-4 py-2.5 font-display text-xs uppercase tracking-wide text-white transition hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-deep)] focus-visible:ring-offset-2"
             >
               İndir
             </button>

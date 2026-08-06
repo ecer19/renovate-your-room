@@ -16,10 +16,12 @@ create index if not exists renovations_created_at_idx on renovations (created_at
 -- kayıt oluşturabilsin ve geçmişi görebilsin diye RLS'i açık bırakıyoruz.
 alter table renovations enable row level security;
 
+drop policy if exists "Herkes tasarım ekleyebilir" on renovations;
 create policy "Herkes tasarım ekleyebilir"
   on renovations for insert
   with check (true);
 
+drop policy if exists "Herkes tasarımları görebilir" on renovations;
 create policy "Herkes tasarımları görebilir"
   on renovations for select
   using (true);
