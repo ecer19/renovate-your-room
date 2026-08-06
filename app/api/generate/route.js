@@ -37,6 +37,25 @@ export async function POST(request) {
   try {
     const originalImageUrl = await fal.storage.upload(image);
 
+    const check = await fal.subscribe("openrouter/router/vision", {
+      input: {
+        model: "google/gemini-2.5-flash-lite",
+        prompt:
+          "Does this image show the interior of a real room (e.g. bedroom, living room, kitchen, bathroom, office)? " +
+          "Answer with exactly one word: YES or NO.",
+        image_urls: [originalImageUrl],
+      },
+    });
+
+    const checkAnswer = (check.data?.output || "").trim().toUpperCase();
+
+    if (!checkAnswer.startsWith("YES")) {
+      return NextResponse.json(
+        { error: "Bu görselde bir oda göremedim. Lütfen odanın net göründüğü bir fotoğraf yükle." },
+        { status: 400 }
+      );
+    }
+
     const result = await fal.subscribe("fal-ai/nano-banana-pro/edit", {
       input: {
         prompt,
