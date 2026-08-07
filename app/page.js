@@ -6,6 +6,7 @@ import PageHero from "@/components/PageHero";
 import RenovateForm from "@/components/RenovateForm";
 import ResultPanel from "@/components/ResultPanel";
 import HistorySection from "@/components/HistorySection";
+import { ROOM_TYPES } from "@/lib/constants";
 
 const initialForm = {
   imageFile: null,
@@ -69,6 +70,7 @@ export default function Home() {
 
       setResult({
         roomType: form.roomType,
+        roomTypeLabel: ROOM_TYPES.find((r) => r.key === form.roomType)?.label || form.roomType,
         style: form.style,
         originalImageUrl: data.originalImageUrl,
         generatedImageUrl: data.generatedImageUrl,

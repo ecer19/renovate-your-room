@@ -1,7 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Sparkles, Lightbulb, Target, CircleCheck, TriangleAlert } from "lucide-react";
+import {
+  Brain,
+  Sparkles,
+  Lightbulb,
+  Target,
+  CircleCheck,
+  TriangleAlert,
+  ShoppingCart,
+  Palette,
+  Search,
+  FileDown,
+  Image as ImageIcon,
+} from "lucide-react";
 import CompareSlider from "@/components/CompareSlider";
 import AIDesignerChat from "@/components/AIDesignerChat";
 
@@ -42,6 +55,8 @@ function BulletList({ items, markerTone }) {
 }
 
 export default function ResultPanel({ status, result, errorMessage, onRegenerate, onRefine, isRefining }) {
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
   async function handleDownload() {
     if (!result?.generatedImageUrl) return;
 
@@ -55,6 +70,36 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+  }
+
+  async function handleDownloadPdf() {
+    if (!result?.generatedImageUrl || isGeneratingPdf) return;
+
+    setIsGeneratingPdf(true);
+    try {
+      const [{ pdf }, { default: RenovationReportDocument }] = await Promise.all([
+        import("@react-pdf/renderer"),
+        import("@/components/RenovationReportPdf"),
+      ]);
+
+      const roomLabel = result.roomTypeLabel || result.roomType;
+      const blob = await pdf(
+        <RenovationReportDocument roomLabel={roomLabel} style={result.style} result={result} />
+      ).toBlob();
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `renovate-your-room-rapor-${result.roomType}-${result.style}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("PDF oluşturulamadı:", error);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   }
 
   return (
@@ -112,9 +157,22 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
                   type="button"
                   onClick={handleDownload}
                   disabled={isRefining}
-                  className="card-frame-sm bg-[var(--accent)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-deep)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="card-frame-sm flex items-center gap-1.5 bg-[var(--accent)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-deep)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  İndir
+                  <ImageIcon className="h-3.5 w-3.5" strokeWidth={2} /> Görsel İndir
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadPdf}
+                  disabled={isRefining || isGeneratingPdf}
+                  className="card-frame-sm flex items-center gap-1.5 bg-[var(--teal)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-[var(--teal-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--teal-deep)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {isGeneratingPdf ? (
+                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  ) : (
+                    <FileDown className="h-3.5 w-3.5" strokeWidth={2} />
+                  )}
+                  PDF Raporu İndir
                 </button>
               </div>
 
@@ -163,6 +221,49 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
                       </div>
                     </div>
                   </AnalysisCard>
+
+                  {result.analysis.products && (
+                    <AnalysisCard icon={ShoppingCart} tone="accent" title="AI Ürün Önerileri">
+                      <div className="flex flex-col gap-3">
+                        {result.analysis.products.map((product, i) => (
+                          <div key={i} className="border-t border-[var(--line)]/15 pt-3 first:border-t-0 first:pt-0">
+                            <p className="text-sm font-bold text-[var(--ink)]">{product.name}</p>
+                            <p className="text-xs text-[var(--ink-soft)]">{product.description}</p>
+                            {product.reason && (
+                              <p className="mt-0.5 text-xs italic text-[var(--teal-deep)]">{product.reason}</p>
+                            )}
+                            <a
+                              href={`https://www.google.com/search?q=${encodeURIComponent(product.name)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-[var(--accent-deep)] hover:underline"
+                            >
+                              <Search className="h-3 w-3" strokeWidth={2} /> İnternette Ara
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    </AnalysisCard>
+                  )}
+
+                  {result.analysis.palette && (
+                    <AnalysisCard icon={Palette} tone="teal" title="Renk Paleti">
+                      <div className="grid grid-cols-5 gap-2">
+                        {result.analysis.palette.map((color, i) => (
+                          <div key={i} className="flex flex-col items-center gap-1">
+                            <span
+                              className="h-9 w-full rounded-md border border-[var(--line)]/30"
+                              style={{ background: color.hex }}
+                            />
+                            <span className="text-center text-[9px] font-bold leading-tight text-[var(--ink)]">
+                              {color.name}
+                            </span>
+                            <span className="text-[8px] text-[var(--ink-soft)]">{color.hex}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </AnalysisCard>
+                  )}
                 </div>
               )}
             </div>
