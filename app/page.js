@@ -71,6 +71,7 @@ export default function Home() {
         style: form.style,
         originalImageUrl: data.originalImageUrl,
         generatedImageUrl: data.generatedImageUrl,
+        analysis: data.analysis || null,
       });
       setStatus("success");
       setHistoryVersion((v) => v + 1);

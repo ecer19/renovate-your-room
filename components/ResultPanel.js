@@ -1,7 +1,44 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { Brain, Sparkles, Lightbulb } from "lucide-react";
 import CompareSlider from "@/components/CompareSlider";
+
+function AnalysisCard({ icon: IconCmp, tone, title, children }) {
+  return (
+    <div className="card-frame flex flex-col gap-3 bg-[var(--card)] p-5 transition hover:-translate-y-1 sm:p-6">
+      <div className="flex items-center gap-2.5">
+        <span
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full"
+          style={{
+            background: tone === "accent" ? "rgba(193,83,27,0.15)" : "rgba(31,77,62,0.15)",
+            color: tone === "accent" ? "var(--accent-deep)" : "var(--teal-deep)",
+          }}
+        >
+          <IconCmp className="h-4 w-4" strokeWidth={1.75} />
+        </span>
+        <h3 className="font-display text-base text-[var(--ink)]">{title}</h3>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function BulletList({ items, markerTone }) {
+  return (
+    <ul className="flex flex-col gap-1.5 text-sm text-[var(--ink-soft)]">
+      {items.map((item, i) => (
+        <li key={i} className="flex gap-2">
+          <span
+            className="mt-2 h-1 w-1 flex-shrink-0 rounded-full"
+            style={{ background: markerTone === "accent" ? "var(--accent)" : "var(--teal)" }}
+          />
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function ResultPanel({ status, result, errorMessage, onRegenerate }) {
   async function handleDownload() {
@@ -68,6 +105,35 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
                   İndir
                 </button>
               </div>
+
+              {result.analysis && (
+                <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+                  <AnalysisCard icon={Brain} tone="accent" title="AI Dekorasyon Danışmanı">
+                    <p className="text-sm text-[var(--ink-soft)]">{result.analysis.advisor}</p>
+                  </AnalysisCard>
+
+                  <AnalysisCard icon={Sparkles} tone="teal" title="Önce / Sonra Analizi">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--accent-deep)]">
+                          Önce
+                        </span>
+                        <BulletList items={result.analysis.before} markerTone="accent" />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--teal-deep)]">
+                          Sonra
+                        </span>
+                        <BulletList items={result.analysis.after} markerTone="teal" />
+                      </div>
+                    </div>
+                  </AnalysisCard>
+
+                  <AnalysisCard icon={Lightbulb} tone="accent" title="Dekorasyon İpuçları">
+                    <BulletList items={result.analysis.tips} markerTone="accent" />
+                  </AnalysisCard>
+                </div>
+              )}
             </div>
           )}
         </motion.section>
