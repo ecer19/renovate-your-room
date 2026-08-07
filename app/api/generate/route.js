@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { buildRenovatePrompt } from "@/lib/buildPrompt";
 import { ROOM_TYPES } from "@/lib/constants";
 import { supabase } from "@/lib/supabaseClient";
+import { generateAnalysis } from "@/lib/generateAnalysis";
 
 fal.config({
   credentials: process.env.FAL_KEY,
@@ -91,52 +92,12 @@ export async function POST(request) {
       generatedImageUrl,
     });
 
-    return NextResponse.json({ originalImageUrl, generatedImageUrl, analysis });
+    return NextResponse.json({ originalImageUrl, generatedImageUrl, prompt, analysis });
   } catch (error) {
     console.error("Renovate üretim hatası:", error);
     return NextResponse.json(
       { error: "Oda yeniden tasarlanamadı. Lütfen tekrar dene." },
       { status: 500 }
     );
-  }
-}
-
-// Değerlendirme, önce/sonra ve ipuçları metinlerini tek bir çağrıda üretir.
-// Bu adım başarısız olursa görsel sonucu etkilemesin diye ayrı try/catch'te tutulur.
-async function generateAnalysis({ roomLabel, style, originalImageUrl, generatedImageUrl }) {
-  try {
-    const prompt =
-      `Sen bir iç mimarlık danışmanısın. Aşağıda bir odanın "önce" ve "sonra" (yeniden tasarlanmış) ` +
-      `fotoğrafları var. Oda türü: ${roomLabel}. Uygulanan stil: ${style}.\n\n` +
-      `Sadece geçerli JSON döndür, başka hiçbir metin veya markdown code fence ekleme. JSON şu şekilde olmalı:\n` +
-      `{\n` +
-      `  "advisor": "Tasarımın güçlü yönlerini, neden başarılı olduğunu ve geliştirilebilecek noktaları içeren 3-4 cümlelik akıcı bir Türkçe değerlendirme.",\n` +
-      `  "before": ["Önce durumunu anlatan 3 kısa Türkçe madde"],\n` +
-      `  "after": ["Sonra durumunu anlatan 3 kısa Türkçe madde"],\n` +
-      `  "tips": ["${style} stiline özel 4 ila 6 arası kısa Türkçe dekorasyon ipucu"]\n` +
-      `}\n\n` +
-      `Tüm metinler Türkçe olmalı. Yalnızca JSON döndür.`;
-
-    const result = await fal.subscribe("openrouter/router/vision", {
-      input: {
-        model: "google/gemini-2.5-flash-lite",
-        prompt,
-        image_urls: [originalImageUrl, generatedImageUrl],
-        max_tokens: 700,
-      },
-    });
-
-    const raw = (result.data?.output || "").trim();
-    const jsonText = raw.replace(/^```json\s*/i, "").replace(/^```\s*/, "").replace(/```\s*$/, "");
-    const parsed = JSON.parse(jsonText);
-
-    if (!parsed.advisor || !Array.isArray(parsed.before) || !Array.isArray(parsed.after) || !Array.isArray(parsed.tips)) {
-      throw new Error("Beklenmeyen analiz formatı.");
-    }
-
-    return parsed;
-  } catch (error) {
-    console.error("Analiz üretilemedi:", error);
-    return null;
   }
 }

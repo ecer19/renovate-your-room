@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Sparkles, Lightbulb } from "lucide-react";
+import { Brain, Sparkles, Lightbulb, Target, CircleCheck, TriangleAlert } from "lucide-react";
 import CompareSlider from "@/components/CompareSlider";
+import AIDesignerChat from "@/components/AIDesignerChat";
 
 function AnalysisCard({ icon: IconCmp, tone, title, children }) {
   return (
@@ -40,7 +41,7 @@ function BulletList({ items, markerTone }) {
   );
 }
 
-export default function ResultPanel({ status, result, errorMessage, onRegenerate }) {
+export default function ResultPanel({ status, result, errorMessage, onRegenerate, onRefine, isRefining }) {
   async function handleDownload() {
     if (!result?.generatedImageUrl) return;
 
@@ -83,28 +84,41 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
 
           {status === "success" && result && (
             <div className="flex w-full max-w-3xl flex-col items-center gap-6">
-              <CompareSlider
-                beforeSrc={result.originalImageUrl}
-                afterSrc={result.generatedImageUrl}
-                beforeAlt="Orijinal oda"
-                afterAlt="Yenilenmiş oda"
-              />
+              <div className="relative w-full">
+                <CompareSlider
+                  beforeSrc={result.originalImageUrl}
+                  afterSrc={result.generatedImageUrl}
+                  beforeAlt="Orijinal oda"
+                  afterAlt="Yenilenmiş oda"
+                />
+                {isRefining && (
+                  <div className="card-frame-lg absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[var(--void)]/70 text-sm text-white">
+                    <span className="h-10 w-10 animate-spin rounded-full border-2 border-white/25 border-t-white" />
+                    İsteğin uygulanıyor...
+                  </div>
+                )}
+              </div>
+
               <div className="flex flex-wrap justify-center gap-3">
                 <button
                   type="button"
                   onClick={onRegenerate}
-                  className="card-frame-sm bg-[var(--card)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-[var(--ink)] transition hover:bg-[var(--paper)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2"
+                  disabled={isRefining}
+                  className="card-frame-sm bg-[var(--card)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-[var(--ink)] transition hover:bg-[var(--paper)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Tekrar Oluştur
                 </button>
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="card-frame-sm bg-[var(--accent)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-deep)] focus-visible:ring-offset-2"
+                  disabled={isRefining}
+                  className="card-frame-sm bg-[var(--accent)] px-6 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-deep)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   İndir
                 </button>
               </div>
+
+              <AIDesignerChat onRefine={onRefine} isRefining={isRefining} />
 
               {result.analysis && (
                 <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
@@ -131,6 +145,23 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
 
                   <AnalysisCard icon={Lightbulb} tone="accent" title="Dekorasyon İpuçları">
                     <BulletList items={result.analysis.tips} markerTone="accent" />
+                  </AnalysisCard>
+
+                  <AnalysisCard icon={Target} tone="teal" title="Bu Stil Sana Uygun mu?">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-[var(--teal-deep)]">
+                          <CircleCheck className="h-3.5 w-3.5" strokeWidth={2} /> Kimler İçin Uygun?
+                        </span>
+                        <BulletList items={result.analysis.fitFor} markerTone="teal" />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-[var(--accent-deep)]">
+                          <TriangleAlert className="h-3.5 w-3.5" strokeWidth={2} /> Çok Uygun Olmayabilir
+                        </span>
+                        <BulletList items={result.analysis.notFitFor} markerTone="accent" />
+                      </div>
+                    </div>
                   </AnalysisCard>
                 </div>
               )}

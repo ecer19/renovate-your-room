@@ -21,6 +21,7 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [historyVersion, setHistoryVersion] = useState(0);
+  const [isRefining, setIsRefining] = useState(false);
 
   const isValid = Boolean(form.imageFile) && Boolean(form.roomType) && Boolean(form.style);
 
@@ -71,6 +72,7 @@ export default function Home() {
         style: form.style,
         originalImageUrl: data.originalImageUrl,
         generatedImageUrl: data.generatedImageUrl,
+        prompt: data.prompt,
         analysis: data.analysis || null,
       });
       setStatus("success");
@@ -85,6 +87,40 @@ export default function Home() {
     setResult(null);
     setStatus("idle");
     setErrorMessage("");
+  }
+
+  async function handleRefine(instruction) {
+    if (!result || isRefining) return;
+
+    setIsRefining(true);
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/refine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          baseImageUrl: result.generatedImageUrl,
+          previousPrompt: result.prompt,
+          instruction,
+          roomType: result.roomType,
+          style: result.style,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data.error || "Değişiklik uygulanamadı.");
+      }
+
+      setResult((prev) => ({ ...prev, generatedImageUrl: data.generatedImageUrl, prompt: data.prompt }));
+      setHistoryVersion((v) => v + 1);
+    } catch (err) {
+      setErrorMessage(err.message || "Bir hata oluştu. Lütfen tekrar dene.");
+    } finally {
+      setIsRefining(false);
+    }
   }
 
   if (!started) {
@@ -112,6 +148,8 @@ export default function Home() {
             result={result}
             errorMessage={errorMessage}
             onRegenerate={handleRegenerate}
+            onRefine={handleRefine}
+            isRefining={isRefining}
           />
         </div>
       </div>
