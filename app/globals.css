@@ -6,29 +6,10 @@ body {
   color: var(--ink);
 }
 
-/* Main tool page ground — cream drifting into light coffee-tan and back,
-   continuously, so the page never reads as one flat slab of color. */
-@keyframes flow {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
+/* Main tool page ground — one soft, fixed wash from coffee at the top down
+   to cream at the bottom, spanning the full page height. */
 .page-gradient {
-  background: linear-gradient(120deg, #f9f3e6, #f6efe0, #ecdfc4, #d9c19a, #ecdfc4, #f6efe0, #f9f3e6);
-  background-size: 300% 300%;
-  animation: flow 24s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .page-gradient,
-  .hero-void {
-    animation: none;
-  }
+  background: linear-gradient(180deg, #c9a876 0%, #e6d3a8 35%, #f8f1e4 75%, #faf5ea 100%);
 }
 
 .font-display {
@@ -154,14 +135,12 @@ body {
   }
 }
 
-/* Cinematic stage for the welcome hero — same cream/coffee family as the
-   page gradient, drifting continuously, with two soft warm glows layered
-   on top for the "floating object" mood. */
+/* Cinematic stage for the welcome hero — the same coffee-to-cream wash as
+   the page gradient, with two soft warm glows layered on top for the
+   "floating object" mood. */
 .hero-void {
   background:
     radial-gradient(70% 60% at 50% 30%, rgba(193, 83, 27, 0.16), transparent 70%),
     radial-gradient(60% 55% at 12% 92%, rgba(31, 77, 62, 0.14), transparent 72%),
-    linear-gradient(135deg, #f9f3e6, #ecdfc4, #d9c19a, #c7a877, #d9c19a, #ecdfc4, #f9f3e6);
-  background-size: 100% 100%, 100% 100%, 300% 300%;
-  animation: flow 20s ease-in-out infinite;
+    linear-gradient(180deg, #c9a876 0%, #e6d3a8 35%, #f8f1e4 75%, #faf5ea 100%);
 }
