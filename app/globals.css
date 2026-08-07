@@ -3,8 +3,13 @@
 
 body {
   font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
-  background-color: var(--paper);
   color: var(--ink);
+}
+
+/* Main tool page ground — a soft diagonal wash between two warm charcoal
+   tones instead of one flat color, so scrolling never feels like a slab. */
+.page-gradient {
+  background: linear-gradient(165deg, #362c1d 0%, var(--paper) 45%, var(--paper-deep) 100%);
 }
 
 .font-display {
@@ -137,11 +142,12 @@ body {
     var(--teal);
 }
 
-/* Cinematic dark stage for the welcome hero — the photo "object" needs a
-   void to float in, distinct from the warm paper world of the tool itself. */
+/* Cinematic stage for the welcome hero — the photo "object" needs a
+   gradient void to float in, distinct from the tool's own page ground.
+   A real diagonal gradient underneath the color glows, not a flat fill. */
 .hero-void {
   background:
-    radial-gradient(60% 50% at 50% 38%, rgba(193, 83, 27, 0.22), transparent 70%),
-    radial-gradient(50% 40% at 20% 85%, rgba(31, 77, 62, 0.35), transparent 70%),
-    var(--void);
+    radial-gradient(70% 60% at 50% 30%, rgba(222, 107, 46, 0.3), transparent 70%),
+    radial-gradient(60% 55% at 12% 92%, rgba(63, 145, 121, 0.42), transparent 72%),
+    linear-gradient(160deg, #3a2f1e 0%, #2a2214 50%, var(--void) 100%);
 }

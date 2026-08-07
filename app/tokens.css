@@ -7,14 +7,15 @@
 */
 
 :root {
-  /* Color — dark, cinematic interior-design palette */
-  --paper: #17130f; /* page ground */
-  --paper-deep: #0f0c09; /* recessed / secondary surface */
-  --card: #241d16; /* card surface */
+  /* Color — dark, cinematic interior-design palette. Lightened from the
+     original near-black pass — reads as rich warm charcoal, not flat black. */
+  --paper: #2b2318; /* page ground */
+  --paper-deep: #1f1911; /* recessed / secondary surface */
+  --card: #382d1e; /* card surface */
   --ink: #f5ecdb; /* primary text, borders — light on dark */
-  --ink-soft: #b7a991; /* secondary text */
+  --ink-soft: #c2b39a; /* secondary text */
   --line: #f5ecdb; /* border color, same as ink on purpose — reads as an etched light edge on dark cards */
-  --void: #130d08; /* near-black, cinematic hero background */
+  --void: #241c12; /* cinematic hero background base, lightened to pair with the gradient */
   --scrim: rgba(10, 7, 4, 0.75); /* fixed dark overlay for photo captions — never flips with theme */
   --ink-on-light: #241c14; /* fixed dark text for the few fixed-white surfaces (tags, handles) */
 
