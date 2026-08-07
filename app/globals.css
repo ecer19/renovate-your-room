@@ -3,12 +3,8 @@
 
 body {
   font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: var(--paper);
   color: var(--ink);
-}
-
-/* Main tool page ground — a thick dark-coffee band up top opening into gold. */
-.page-gradient {
-  background: linear-gradient(180deg, #241111 0%, #4a2624 28%, #8f5148 55%, #c98d7f 85%, #e6bcae 100%);
 }
 
 .font-display {
@@ -110,7 +106,7 @@ body {
   position: absolute;
   border-radius: 999px;
   filter: blur(70px);
-  mix-blend-mode: multiply;
+  mix-blend-mode: soft-light;
   pointer-events: none;
 }
 
@@ -134,12 +130,18 @@ body {
   }
 }
 
-/* Cinematic stage for the welcome hero — the same coffee-to-cream wash as
-   the page gradient, with two soft warm glows layered on top for the
-   "floating object" mood. */
+.hero-vignette {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.18), transparent 65%),
+    var(--teal);
+}
+
+/* Cinematic dark stage for the welcome hero — the photo "object" needs a
+   void to float in, distinct from the warm paper world of the tool itself. */
 .hero-void {
   background:
-    radial-gradient(70% 60% at 50% 30%, rgba(193, 83, 27, 0.16), transparent 70%),
-    radial-gradient(60% 55% at 12% 92%, rgba(31, 77, 62, 0.14), transparent 72%),
-    linear-gradient(180deg, #241111 0%, #4a2624 26%, #8f5148 55%, #c98d7f 85%, #e6bcae 100%);
+    radial-gradient(60% 50% at 50% 38%, rgba(193, 83, 27, 0.22), transparent 70%),
+    radial-gradient(50% 40% at 20% 85%, rgba(31, 77, 62, 0.35), transparent 70%),
+    var(--void);
 }

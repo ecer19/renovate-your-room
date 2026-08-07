@@ -44,8 +44,8 @@ export default function WelcomeScreen({ onStart }) {
 
   return (
     <main className="hero-void relative flex min-h-screen flex-col items-center justify-center gap-10 overflow-hidden px-4 py-16 text-center">
-      <div className="blob blob-a -left-24 -top-24 h-[26rem] w-[26rem] bg-[var(--accent)]/20" />
-      <div className="blob blob-c -bottom-32 right-0 h-[26rem] w-[26rem] bg-[var(--teal)]/20" />
+      <div className="blob blob-a -left-24 -top-24 h-[26rem] w-[26rem] bg-[var(--accent)]/35" />
+      <div className="blob blob-c -bottom-32 right-0 h-[26rem] w-[26rem] bg-[var(--teal)]/45" />
 
       <div
         ref={stageRef}
