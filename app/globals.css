@@ -6,21 +6,9 @@ body {
   color: var(--ink);
 }
 
-/* Main tool page ground — opens from dark coffee at the very top, through
-   light coffee, settling into cream — one fixed wash spanning the page.
-   The dark band is brief on purpose: it sits behind PageHero's own opaque
-   background, so body text below the header always lands on the lighter,
-   already-legible part of the gradient. */
+/* Main tool page ground — a thick dark-coffee band up top opening into gold. */
 .page-gradient {
-  background: linear-gradient(
-    180deg,
-    #2b1a0e 0%,
-    #6b4a2a 10%,
-    #c9a876 25%,
-    #ecdfc4 50%,
-    #f8f1e4 80%,
-    #faf5ea 100%
-  );
+  background: linear-gradient(180deg, #1f1408 0%, #2b1a0e 30%, #6b4a1e 55%, #c9962c 85%, #d9a441 100%);
 }
 
 .font-display {
@@ -153,13 +141,5 @@ body {
   background:
     radial-gradient(70% 60% at 50% 30%, rgba(193, 83, 27, 0.16), transparent 70%),
     radial-gradient(60% 55% at 12% 92%, rgba(31, 77, 62, 0.14), transparent 72%),
-    linear-gradient(
-      180deg,
-      #2b1a0e 0%,
-      #6b4a2a 8%,
-      #c9a876 20%,
-      #ecdfc4 45%,
-      #f8f1e4 75%,
-      #faf5ea 100%
-    );
+    linear-gradient(180deg, #1f1408 0%, #2b1a0e 28%, #6b4a1e 55%, #c9962c 85%, #d9a441 100%);
 }
