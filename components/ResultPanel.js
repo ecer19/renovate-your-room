@@ -122,7 +122,7 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
           )}
 
           {status === "error" && (
-            <div className="card-frame-lg flex aspect-[16/9] w-full max-w-3xl flex-col items-center justify-center gap-2 border-red-300 bg-red-50 p-4 text-center text-sm text-red-700">
+            <div className="card-frame-lg flex aspect-[16/9] w-full max-w-3xl flex-col items-center justify-center gap-2 border-red-500/40 bg-red-950/40 p-4 text-center text-sm text-red-300">
               {errorMessage || "Bir hata oluştu. Lütfen tekrar dene."}
             </div>
           )}

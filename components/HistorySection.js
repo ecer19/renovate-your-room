@@ -116,7 +116,7 @@ export default function HistorySection({ refreshKey }) {
         </p>
       )}
 
-      {status === "error" && <p className="text-center text-sm text-red-700">Geçmiş tasarımlar yüklenemedi.</p>}
+      {status === "error" && <p className="text-center text-sm text-red-400">Geçmiş tasarımlar yüklenemedi.</p>}
 
       {status === "loaded" && visibleItems.length === 0 && (
         <p className="text-center text-sm text-[var(--ink-soft)]">
