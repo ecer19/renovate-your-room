@@ -6,10 +6,29 @@ body {
   color: var(--ink);
 }
 
-/* Main tool page ground — a soft diagonal wash between two warm charcoal
-   tones instead of one flat color, so scrolling never feels like a slab. */
+/* Main tool page ground — cream drifting into light coffee-tan and back,
+   continuously, so the page never reads as one flat slab of color. */
+@keyframes flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 .page-gradient {
-  background: linear-gradient(165deg, #362c1d 0%, var(--paper) 45%, var(--paper-deep) 100%);
+  background: linear-gradient(120deg, #f9f3e6, #f6efe0, #ecdfc4, #d9c19a, #ecdfc4, #f6efe0, #f9f3e6);
+  background-size: 300% 300%;
+  animation: flow 24s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-gradient,
+  .hero-void {
+    animation: none;
+  }
 }
 
 .font-display {
@@ -111,7 +130,7 @@ body {
   position: absolute;
   border-radius: 999px;
   filter: blur(70px);
-  mix-blend-mode: soft-light;
+  mix-blend-mode: multiply;
   pointer-events: none;
 }
 
@@ -135,19 +154,14 @@ body {
   }
 }
 
-.hero-vignette {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.18), transparent 65%),
-    var(--teal);
-}
-
-/* Cinematic stage for the welcome hero — the photo "object" needs a
-   gradient void to float in, distinct from the tool's own page ground.
-   A real diagonal gradient underneath the color glows, not a flat fill. */
+/* Cinematic stage for the welcome hero — same cream/coffee family as the
+   page gradient, drifting continuously, with two soft warm glows layered
+   on top for the "floating object" mood. */
 .hero-void {
   background:
-    radial-gradient(70% 60% at 50% 30%, rgba(222, 107, 46, 0.3), transparent 70%),
-    radial-gradient(60% 55% at 12% 92%, rgba(63, 145, 121, 0.42), transparent 72%),
-    linear-gradient(160deg, #3a2f1e 0%, #2a2214 50%, var(--void) 100%);
+    radial-gradient(70% 60% at 50% 30%, rgba(193, 83, 27, 0.16), transparent 70%),
+    radial-gradient(60% 55% at 12% 92%, rgba(31, 77, 62, 0.14), transparent 72%),
+    linear-gradient(135deg, #f9f3e6, #ecdfc4, #d9c19a, #c7a877, #d9c19a, #ecdfc4, #f9f3e6);
+  background-size: 100% 100%, 100% 100%, 300% 300%;
+  animation: flow 20s ease-in-out infinite;
 }

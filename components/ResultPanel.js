@@ -122,7 +122,7 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
           )}
 
           {status === "error" && (
-            <div className="card-frame-lg flex aspect-[16/9] w-full max-w-3xl flex-col items-center justify-center gap-2 border-red-500/40 bg-red-950/40 p-4 text-center text-sm text-red-300">
+            <div className="card-frame-lg flex aspect-[16/9] w-full max-w-3xl flex-col items-center justify-center gap-2 border-red-300 bg-red-50 p-4 text-center text-sm text-red-700">
               {errorMessage || "Bir hata oluştu. Lütfen tekrar dene."}
             </div>
           )}
@@ -137,7 +137,10 @@ export default function ResultPanel({ status, result, errorMessage, onRegenerate
                   afterAlt="Yenilenmiş oda"
                 />
                 {isRefining && (
-                  <div className="card-frame-lg absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[var(--void)]/70 text-sm text-white">
+                  <div
+                    className="card-frame-lg absolute inset-0 flex flex-col items-center justify-center gap-3 text-sm text-white"
+                    style={{ background: "var(--scrim)" }}
+                  >
                     <span className="h-10 w-10 animate-spin rounded-full border-2 border-white/25 border-t-white" />
                     İsteğin uygulanıyor...
                   </div>

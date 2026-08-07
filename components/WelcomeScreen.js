@@ -44,8 +44,8 @@ export default function WelcomeScreen({ onStart }) {
 
   return (
     <main className="hero-void relative flex min-h-screen flex-col items-center justify-center gap-10 overflow-hidden px-4 py-16 text-center">
-      <div className="blob blob-a -left-24 -top-24 h-[26rem] w-[26rem] bg-[var(--accent)]/35" />
-      <div className="blob blob-c -bottom-32 right-0 h-[26rem] w-[26rem] bg-[var(--teal)]/45" />
+      <div className="blob blob-a -left-24 -top-24 h-[26rem] w-[26rem] bg-[var(--accent)]/20" />
+      <div className="blob blob-c -bottom-32 right-0 h-[26rem] w-[26rem] bg-[var(--teal)]/20" />
 
       <div
         ref={stageRef}
@@ -132,7 +132,7 @@ export default function WelcomeScreen({ onStart }) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75, duration: 0.5 }}
-            className="text-white"
+            className="text-[var(--ink)]"
           >
             Your Room
           </motion.span>
@@ -141,7 +141,7 @@ export default function WelcomeScreen({ onStart }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.95, duration: 0.5 }}
-          className="max-w-sm text-sm text-white/70 sm:text-base"
+          className="max-w-sm text-sm text-[var(--ink-soft)] sm:text-base"
         >
           Odanın fotoğrafını yükle, stilini seç, yapay zekâ ile yeniden tasarla.
         </motion.p>
@@ -155,7 +155,7 @@ export default function WelcomeScreen({ onStart }) {
       >
         <MagneticButton
           onClick={onStart}
-          className="card-frame bg-[var(--accent)] px-10 py-4 font-display text-base text-white transition-colors hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)]"
+          className="card-frame bg-[var(--accent)] px-10 py-4 font-display text-base text-white transition-colors hover:bg-[var(--accent-deep)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--paper)]"
         >
           Başla
         </MagneticButton>

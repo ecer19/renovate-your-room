@@ -78,8 +78,8 @@ export default function PageHero() {
         </div>
 
         <div>
-          <h1 className="font-display text-2xl text-white sm:text-3xl">Renovate Your Room</h1>
-          <p className="mx-auto mt-2 max-w-md text-sm text-white/70">
+          <h1 className="font-display text-2xl text-[var(--ink)] sm:text-3xl">Renovate Your Room</h1>
+          <p className="mx-auto mt-2 max-w-md text-sm text-[var(--ink-soft)]">
             Fotoğrafını yükle, oda türünü ve stilini seç, yeniden tasarla.
           </p>
         </div>

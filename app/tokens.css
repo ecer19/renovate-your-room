@@ -1,5 +1,5 @@
 /*
-  Design tokens — "Numune" direction, dark theme.
+  Design tokens — "Numune" direction, warm cream/coffee light theme.
   Every component reads color/type/radius/shadow/motion values from here.
   Variable NAMES stay stable on purpose (--accent, --teal, etc. are used
   throughout the component tree); only their VALUES change when the
@@ -7,23 +7,24 @@
 */
 
 :root {
-  /* Color — dark, cinematic interior-design palette. Lightened from the
-     original near-black pass — reads as rich warm charcoal, not flat black. */
-  --paper: #2b2318; /* page ground */
-  --paper-deep: #1f1911; /* recessed / secondary surface */
-  --card: #382d1e; /* card surface */
-  --ink: #f5ecdb; /* primary text, borders — light on dark */
-  --ink-soft: #c2b39a; /* secondary text */
-  --line: #f5ecdb; /* border color, same as ink on purpose — reads as an etched light edge on dark cards */
-  --void: #241c12; /* cinematic hero background base, lightened to pair with the gradient */
+  /* Color — cream/coffee palette. Flat utilities (buttons, chips) use these
+     directly; page-level backgrounds additionally animate across the same
+     family via .page-gradient / .hero-void (see globals.css). */
+  --paper: #f6efe0; /* page ground — warm cream */
+  --paper-deep: #ecdfc4; /* recessed / secondary surface — light tan */
+  --card: #fffcf5; /* card surface — near-white cream */
+  --ink: #3b2a1a; /* primary text, borders — coffee brown on cream */
+  --ink-soft: #7a6248; /* secondary text */
+  --line: #3b2a1a; /* border color, same as ink on purpose */
+  --void: #e7d4ab; /* deepest stop the animated gradients drift through */
   --scrim: rgba(10, 7, 4, 0.75); /* fixed dark overlay for photo captions — never flips with theme */
   --ink-on-light: #241c14; /* fixed dark text for the few fixed-white surfaces (tags, handles) */
 
   --accent: #c1531b; /* clay — primary accent (CTA, primary selections) */
-  --accent-deep: #de6b2e; /* brighter on hover — darkening further would sink into the dark ground */
-  --teal: #2f7a63; /* pine, brightened for visibility on dark. Name kept for continuity
-                        with existing component references. */
-  --teal-deep: #3f9179;
+  --accent-deep: #9c4014;
+  --teal: #1f4d3e; /* pine — secondary accent. Name kept for continuity with
+                        existing component references. */
+  --teal-deep: #163a2e;
 
   /* Type scale */
   --text-display-xl: clamp(2.75rem, 6vw, 4.75rem);
@@ -40,7 +41,7 @@
      soft photographic shadow for large elevated surfaces */
   --shadow-flat: 2px 2px 0 var(--line);
   --shadow-card: 5px 5px 0 var(--line);
-  --shadow-lift: 0 24px 48px -16px rgba(0, 0, 0, 0.6);
+  --shadow-lift: 0 24px 48px -18px rgba(59, 42, 26, 0.35);
 
   /* Motion */
   --motion-fast: 150ms;
