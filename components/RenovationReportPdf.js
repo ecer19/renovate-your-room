@@ -1,4 +1,20 @@
-import { Document, Page, View, Text, Image, Link, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, View, Text, Image, Link, StyleSheet, Font } from "@react-pdf/renderer";
+
+// Standart PDF fontları (Helvetica vb.) Türkçe karakterleri (ı, ş, ğ, İ) desteklemez.
+// Noto Sans, Latin Extended kapsamıyla tüm Türkçe karakterleri içeriyor — tek bir
+// değişken (variable) font dosyasından hem normal hem kalın ağırlığı kaydediyoruz.
+// Bu bileşen tarayıcı içinde çalıştığı için mutlak URL kullanıyoruz (göreli yol
+// fetch ile Node ortamında çözülemez, tarayıcıda ise origin'e ihtiyaç duyar).
+const fontUrl = typeof window !== "undefined" ? `${window.location.origin}/fonts/NotoSans.ttf` : "/fonts/NotoSans.ttf";
+
+Font.register({
+  family: "NotoSans",
+  fonts: [
+    { src: fontUrl, fontWeight: 400 },
+    { src: fontUrl, fontWeight: 700 },
+  ],
+});
+Font.registerHyphenationCallback((word) => [word]);
 
 const INK = "#241c14";
 const INK_SOFT = "#6b5a45";
@@ -11,12 +27,12 @@ const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontSize: 10,
-    fontFamily: "Helvetica",
+    fontFamily: "NotoSans",
     color: INK,
   },
   coverPage: {
     padding: 48,
-    fontFamily: "Helvetica",
+    fontFamily: "NotoSans",
     color: INK,
     backgroundColor: PAPER,
     justifyContent: "space-between",
@@ -26,12 +42,14 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textTransform: "uppercase",
     color: ACCENT,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     marginBottom: 10,
   },
   coverTitle: {
     fontSize: 34,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     marginBottom: 6,
   },
   coverSubtitle: {
@@ -57,7 +75,8 @@ const styles = StyleSheet.create({
   },
   coverMetaValue: {
     fontSize: 12,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
   },
   footerBrand: {
     fontSize: 9,
@@ -66,13 +85,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     marginBottom: 14,
     color: INK,
   },
   bigImage: {
     width: "100%",
-    height: 620,
+    height: 480,
     objectFit: "cover",
     borderRadius: 4,
   },
@@ -93,7 +113,8 @@ const styles = StyleSheet.create({
   },
   compareLabel: {
     fontSize: 9,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     textTransform: "uppercase",
     letterSpacing: 1,
     textAlign: "center",
@@ -107,7 +128,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 12,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     marginBottom: 8,
     color: INK,
   },
@@ -140,7 +162,8 @@ const styles = StyleSheet.create({
   },
   subheading: {
     fontSize: 9,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: 6,
@@ -153,7 +176,8 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 11,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     marginBottom: 3,
   },
   productDesc: {
@@ -165,7 +189,7 @@ const styles = StyleSheet.create({
   productReason: {
     fontSize: 9,
     color: TEAL,
-    fontFamily: "Helvetica-Oblique",
+    fontFamily: "NotoSans",
     marginBottom: 5,
   },
   productLink: {
@@ -191,7 +215,8 @@ const styles = StyleSheet.create({
   },
   swatchName: {
     fontSize: 8.5,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "NotoSans",
+    fontWeight: 700,
     textAlign: "center",
   },
   swatchHex: {
